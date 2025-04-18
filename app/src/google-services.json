@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "881503571300",
+    "project_id": "payapp-af2cd",
+    "storage_bucket": "payapp-af2cd.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:881503571300:android:3b1c0391a3541c3ee7fe71",
+        "android_client_info": {
+          "package_name": "com.example.payapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAh6fkf0zkbPzm44x8dxmW-OXmzs7v0RX8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
