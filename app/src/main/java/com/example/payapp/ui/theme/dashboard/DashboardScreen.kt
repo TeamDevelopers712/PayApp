@@ -47,6 +47,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -58,6 +59,8 @@ import androidx.compose.ui.text.input.*
 import androidx.compose.ui.unit.*
 import androidx.compose.ui.graphics.painter.Painter
 import com.example.payapp.ui.theme.QRandBarcode.generateQRCode
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -72,6 +75,7 @@ fun DashboardScreen(
     var receiverId by remember { mutableStateOf("") }
     var amount by remember { mutableStateOf("") }
     var isLoading by remember { mutableStateOf(true) }
+    var amountText by remember { mutableStateOf("") }
 
     val firebaseUser = FirebaseAuth.getInstance().currentUser
     val uid = firebaseUser?.uid ?: "Unknown UID"
@@ -119,8 +123,11 @@ fun DashboardScreen(
                     val name = data["name"] as? String ?: "Unknown"
                     val accountBalance = data["account_balance"] as? Double ?: 0.0
 
+                    // Scrollable content
                     Column(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .verticalScroll(rememberScrollState()), // Enable scrolling
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         // 💳 Account Info Card
@@ -165,6 +172,38 @@ fun DashboardScreen(
                                     fontWeight = FontWeight.Bold,
                                     color = White
                                 )
+
+                                Spacer(modifier = Modifier.height(16.dp))
+
+                                // TO add balance
+                                OutlinedTextField(
+                                    value = amountText,
+                                    onValueChange = { amountText = it },
+                                    label = { Text("Enter Amount") },
+                                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(top = 16.dp)
+                                )
+
+                                // To add balance
+                                TextButton(
+                                    onClick = {
+                                        val amount = amountText.toDoubleOrNull()
+                                        if (amount != null && amount > 0) {
+                                            viewModel.addBalance(uid, amount) {
+                                                viewModel.fetchCustomerData(uid) // refresh
+                                                Toast.makeText(context, "₹$amount added", Toast.LENGTH_SHORT).show()
+                                                amountText = ""
+                                            }
+                                        } else {
+                                            Toast.makeText(context, "Enter a valid amount", Toast.LENGTH_SHORT).show()
+                                        }
+                                    },
+                                    modifier = Modifier.padding(top = 8.dp)
+                                ) {
+                                    Text("Add Balance", color = LightIndigo, fontWeight = FontWeight.Bold)
+                                }
                             }
                         }
 
@@ -243,14 +282,12 @@ fun DashboardScreen(
 
                         Spacer(modifier = Modifier.height(16.dp))
 
-
                         // 🟢 Send Money Button
                         Button(
                             onClick = {
                                 val amountDouble = amount.toDoubleOrNull()
                                 if (receiverId.isNotEmpty() && amountDouble != null && amountDouble > 0 && pin.length >= 4) {
                                     if (receiverId != uid) {
-                                        // You can later validate the PIN from Firestore or secure source
                                         viewModel.makeTransaction(uid, receiverId, amountDouble) {
                                             viewModel.fetchCustomerData(uid)
                                         }
@@ -269,15 +306,13 @@ fun DashboardScreen(
                         ) {
                             Text(text = "Send Money", color = White)
                         }
-
-
-
                     }
                 } ?: CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
             }
         }
     }
 }
+
 
 
 

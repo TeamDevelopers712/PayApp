@@ -82,5 +82,20 @@ class FirestoreViewModel : ViewModel() {
             Log.e("Transaction", "Transaction failed: ${e.message}")
         }
     }
-    
+
+    fun addBalance(userId: String, amount: Double, onComplete: () -> Unit) {
+        val db = Firebase.firestore
+        val userRef = db.collection("accounts").document(userId)
+
+        db.runTransaction { transaction ->
+            val snapshot = transaction.get(userRef)
+            val currentBalance = snapshot.getDouble("account_balance") ?: 0.0
+            transaction.update(userRef, "account_balance", currentBalance + amount)
+        }.addOnSuccessListener {
+            onComplete()
+        }.addOnFailureListener {
+            Log.e("Firestore", "Failed to add balance", it)
+        }
+    }
+
 }
