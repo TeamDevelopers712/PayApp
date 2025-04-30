@@ -93,10 +93,24 @@ fun DashboardScreen(
     val LightGray = ComposeColor(0xFFB3B3B3)
     val Green = ComposeColor(0xFF00C853)
 
-    // Fetch data when screen loads
+    var errorMessage by remember { mutableStateOf("") }
+
+
+//    // Fetch data when screen loads
+//    LaunchedEffect(userId) {
+//        viewModel.fetchCustomerData(userId)
+//        isLoading = false
+//    }
     LaunchedEffect(userId) {
-        viewModel.fetchCustomerData(userId)
-        isLoading = false
+        isLoading = true
+        try {
+            viewModel.fetchCustomerData(userId)  // Fetch customer data
+        } catch (e: Exception) {
+            errorMessage = "Error fetching data: ${e.message}"
+            Log.e("DashboardScreen", errorMessage)
+        } finally {
+            isLoading = false
+        }
     }
 
     Scaffold(
@@ -305,6 +319,19 @@ fun DashboardScreen(
                             shape = RoundedCornerShape(12.dp)
                         ) {
                             Text(text = "Send Money", color = White)
+                        }
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        Button(
+                            onClick = { navController.navigate("cryptodashboard") },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 32.dp),
+                            colors = ButtonDefaults.buttonColors(containerColor = LightIndigo),
+                            shape = RoundedCornerShape(12.dp)
+                        ) {
+                            Text(text = "Crytop Wallet", color = White)
                         }
                     }
                 } ?: CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))

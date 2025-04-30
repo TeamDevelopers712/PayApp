@@ -52,6 +52,8 @@ fun SignupScreen(navController: NavController, authViewModel: AuthViewModel) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var pin by remember { mutableStateOf("") }
+    var address by remember { mutableStateOf("") }
+    var privatekey by remember { mutableStateOf("") }
     val context = LocalContext.current
 
     val backgroundColor = Color(0xFF000060) // Deep blue
@@ -146,7 +148,7 @@ fun SignupScreen(navController: NavController, authViewModel: AuthViewModel) {
             Spacer(modifier = Modifier.height(30.dp))
 
             OutlinedButton(
-                onClick = { registerUser(email, password, pin, context, navController)  },
+                onClick = { registerUser(email, password, pin, address,privatekey,context, navController)  },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp),
@@ -225,18 +227,20 @@ fun SignupScreen(navController: NavController, authViewModel: AuthViewModel) {
 //    }
 //}
 
-
+//To register account
 fun registerUser(
     email: String,
     password: String,
     pin: String,
+    address: String,
+    privatekey: String,
     context: Context,
     navController: NavController
 ) {
     FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
         .addOnSuccessListener { result ->
             val userId = result.user?.uid
-            saveStudentData(userId, email, pin)
+            saveStudentData(userId, email, pin, address, privatekey)
             navController.navigate("login")
         }
         .addOnFailureListener { e ->
@@ -244,14 +248,16 @@ fun registerUser(
         }
 }
 
-
-fun saveStudentData(userId: String?, email: String, pin: String) {
+//To create account parameters in firestore database
+fun saveStudentData(userId: String?, email: String, pin: String, address: String, privatekey: String) {
     val customerData = hashMapOf(
         "name" to "New User",
         "email" to email,
         "account_balance" to 0,
         "fees_paid" to false,
-        "pin" to pin
+        "pin" to pin,
+        "address" to address,
+        "private_key" to privatekey
     )
 
 

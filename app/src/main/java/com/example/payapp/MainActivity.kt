@@ -20,6 +20,7 @@ import com.example.payapp.ui.theme.navigation.AppNavGraph
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         enableEdgeToEdge()
         setContent {
             PayAppTheme {

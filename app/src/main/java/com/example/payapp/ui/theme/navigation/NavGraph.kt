@@ -8,6 +8,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.payapp.ui.theme.crypto.CryptoAccountInfoScreen
 import com.example.payapp.ui.theme.dashboard.DashboardScreen
 import com.example.payapp.ui.theme.entryManagement.AuthViewModel
 import com.example.payapp.ui.theme.entryManagement.LoginScreen
@@ -16,6 +17,8 @@ import com.example.payapp.ui.theme.firestore.FirestoreViewModel
 import com.example.payapp.ui.theme.payment.PaymentScreen
 import com.example.payapp.ui.theme.qrscanner.QrScannerScreen
 import com.google.firebase.auth.FirebaseAuth
+import org.web3j.protocol.Web3j
+import org.web3j.protocol.http.HttpService
 
 
 @Composable
@@ -75,6 +78,13 @@ fun AppNavGraph(
                 Log.e("PaymentScreen", "User not logged in!")
                 navController.navigate("login") // Redirect to login if user is not authenticated
             }
+        }
+
+        composable("cryptodashboard") {
+
+            CryptoAccountInfoScreen(
+                web3j =  Web3j.build(HttpService("HTTP://192.168.0.100:7545")),
+            )
         }
 
     }

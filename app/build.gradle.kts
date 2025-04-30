@@ -85,4 +85,10 @@ dependencies {
 
     // ZXing Android Embedded for scanning (optional)
     implementation ("com.journeyapps:zxing-android-embedded:4.3.0")
+
+    //kotlin coroutine scope and Web3j
+    implementation("org.web3j:core:4.8.7")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.0")
+    implementation("org.bouncycastle:bcprov-jdk15on:1.70")
 }
