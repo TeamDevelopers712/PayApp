@@ -19,3 +19,18 @@ QR Scanner
 
 
 ![WhatsApp Image 2025-05-02 at 12 30 19_9bd7373d](https://github.com/user-attachments/assets/a4d2f90f-1c01-458c-8419-0bcc87bea581)
+
+
+Ganache
+
+![image](https://github.com/user-attachments/assets/41d4dce0-7e9e-4f86-bf5e-99f15635ae89)
+
+Firestore Database
+
+![image](https://github.com/user-attachments/assets/d2742990-b39e-453a-830a-05b75c775c6d)
+
+
+Authentication Firebase
+
+![image](https://github.com/user-attachments/assets/59947be8-1b9f-490a-acd9-7e77a1ee669b)
+
